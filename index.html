@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>erys</title>
+<style>
+  :root { --bg:#0b0b0d; --panel:#131318; --line:#23232c; --text:#dfe6f3; --muted:#8089a0; --accent:#82aaff; --purple:#c792ea; }
+  * { box-sizing:border-box; margin:0; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI', system-ui, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a { color:inherit; text-decoration:none; }
+  section { max-width:1080px; margin:0 auto; padding:90px 24px 20px; }
+  h2 { font-size:34px; text-align:center; letter-spacing:-.5px; }
+  .sub { text-align:center; color:var(--muted); margin:8px auto 40px; max-width:520px; }
+  .grad { background:linear-gradient(90deg, var(--accent), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  /* Background */
+  .bg { position:fixed; inset:0; z-index:-1; overflow:hidden;
+    background-image:linear-gradient(rgba(130,170,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(130,170,255,.04) 1px, transparent 1px); background-size:48px 48px; }
+  .blob { position:absolute; width:560px; height:560px; border-radius:50%; filter:blur(110px); opacity:.28; animation:drift 18s ease-in-out infinite alternate; }
+  .b1 { background:#3b5bdb; top:-160px; left:-120px; } .b2 { background:#9b59d0; bottom:-200px; right:-120px; animation-delay:-8s; }
+  @keyframes drift { to { transform:translate(120px, 90px) scale(1.15); } }
+
+  /* Nav */
+  nav { position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; padding:14px 28px;
+    background:rgba(11,11,13,.7); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+  .logo { font-weight:700; font-size:19px; display:flex; align-items:center; gap:8px; }
+  .logo svg { width:20px; fill:#fff; filter:drop-shadow(0 0 8px var(--accent)); }
+  .links { display:flex; gap:26px; font-size:14px; color:var(--muted); }
+  .links a:hover { color:#fff; }
+  .btn { display:inline-block; padding:11px 24px; border-radius:10px; font-weight:600; font-size:14.5px; border:1px solid var(--line);
+    background:var(--panel); cursor:pointer; transition:transform .15s, box-shadow .25s, background .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .btn.pri { background:linear-gradient(135deg, #4f7be0, #8a63d2); border-color:transparent; color:#fff; box-shadow:0 6px 24px rgba(100,130,230,.35); }
+  .btn.pri:hover { box-shadow:0 10px 34px rgba(100,130,230,.55); }
+
+  /* Hero */
+  .hero { text-align:center; padding-top:110px; }
+  .pill { display:inline-block; font-size:12.5px; padding:5px 14px; border-radius:20px; color:var(--accent); background:rgba(130,170,255,.1); border:1px solid rgba(130,170,255,.25); }
+  h1 { font-size:clamp(42px, 8vw, 78px); line-height:1.05; letter-spacing:-2px; margin:20px 0 18px; }
+  .hero p { color:var(--muted); font-size:18px; max-width:560px; margin:0 auto 32px; }
+  .cta { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* UI mock */
+  .win { max-width:760px; margin:64px auto 0; background:#0f0f12; border:1px solid var(--line); border-radius:14px; overflow:hidden; position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 80px rgba(100,130,230,.12); text-align:left; animation:float 6s ease-in-out infinite; }
+  @keyframes float { 50% { transform:translateY(-8px); } }
+  .wtabs { display:flex; align-items:center; gap:4px; padding:0 12px; height:40px; background:#131316; border-bottom:1px solid var(--line); font-size:13px; }
+  .wtabs b { font-weight:400; color:var(--muted); padding:11px 12px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s; }
+  .wtabs b:hover { color:#fff; } .wtabs b.on { color:#fff; border-color:var(--accent); }
+  .wtabs .r { margin-left:auto; display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11.5px; }
+  .pfp { width:24px; height:24px; border-radius:50%; border:2px solid #9ff3ff; background:linear-gradient(135deg, var(--accent), var(--purple)); box-shadow:0 0 10px rgba(159,243,255,.5); }
+  .wbody { height:250px; padding:16px 20px; font:13.5px/1.75 Consolas, 'Cascadia Code', monospace; }
+  .panel { display:none; } .panel.on { display:block; animation:fade .35s ease; }
+  @keyframes fade { from { opacity:0; transform:translateY(6px); } }
+  .ln { color:#3a3f4d; display:inline-block; width:26px; user-select:none; }
+  .k { color:#c792ea; } .s { color:#a5e075; } .c { color:#5c6a80; font-style:italic; } .n { color:#f78c6c; }
+  .cur { display:inline-block; width:2px; height:15px; background:var(--accent); vertical-align:middle; animation:blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .log b { display:inline-block; width:62px; font-weight:600; } .i { color:var(--accent); } .g { color:#a5e075; } .y { color:#ffcb6b; }
+  .card2 { display:flex; justify-content:space-between; align-items:center; background:#15151a; border:1px solid var(--line); border-radius:9px; padding:9px 13px; margin-bottom:9px; font-family:'Segoe UI'; }
+  .card2 small { color:var(--muted); display:block; font-size:11.5px; }
+  .mini { font-size:11px; padding:4px 11px; border-radius:6px; background:#222b3f; border:1px solid #35476d; }
+  .wbar { display:flex; align-items:center; justify-content:space-between; height:44px; padding:0 14px; background:#131316; border-top:1px solid var(--line); font-size:11.5px; color:var(--muted); }
+  .wbar svg { width:19px; height:19px; stroke:#dfe6f3; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; margin-right:14px; }
+  .st i { display:inline-block; width:7px; height:7px; border-radius:50%; background:#a5e075; margin-right:6px; box-shadow:0 0 8px #a5e075; }
+  .toast { position:absolute; right:14px; bottom:56px; background:#17171c; border:1px solid #2a2a33; border-radius:10px; padding:11px 36px 13px 14px; font-size:13px; overflow:hidden;
+    animation:toast 7s ease-in-out infinite; }
+  .toast::after { content:''; position:absolute; left:0; bottom:0; height:3px; width:100%; background:#a5e075; transform-origin:left; animation:bar 7s linear infinite; }
+  @keyframes toast { 0%,8% { transform:translateX(130%); opacity:0; } 14%,80% { transform:none; opacity:1; } 88%,100% { transform:translateX(130%); opacity:0; } }
+  @keyframes bar { 0%,14% { transform:scaleX(1); } 80%,100% { transform:scaleX(0); } }
+
+  /* Features */
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:18px; }
+  .feat { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px; transition:transform .25s, border-color .25s, box-shadow .25s; }
+  .feat:hover { transform:translateY(-5px); border-color:#35476d; box-shadow:0 14px 40px rgba(100,130,230,.12); }
+  .feat .ic { font-size:22px; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:rgba(130,170,255,.1); margin-bottom:14px; }
+  .feat h3 { font-size:17px; margin-bottom:6px; } .feat p { color:var(--muted); font-size:14px; }
+
+  /* Pricing */
+  .plans { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; }
+  .plan { position:relative; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:28px 22px; text-align:center; transition:transform .25s, box-shadow .25s; }
+  .plan:hover { transform:translateY(-6px); box-shadow:0 18px 50px color-mix(in srgb, var(--t) 22%, transparent); }
+  .plan.best { border-color:var(--t); box-shadow:0 0 0 1px var(--t), 0 18px 50px color-mix(in srgb, var(--t) 20%, transparent); }
+  .tag { position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:11px; font-weight:700; padding:3px 12px; border-radius:20px; background:var(--t); color:#07131a; white-space:nowrap; }
+  .gem { width:46px; height:46px; margin:0 auto 10px; filter:drop-shadow(0 0 12px var(--t)); }
+  .plan h3 { color:var(--t); font-size:19px; } .dur { color:var(--muted); font-size:13px; margin-bottom:14px; }
+  .price { font-size:38px; font-weight:700; letter-spacing:-1px; } .price span { font-size:15px; color:var(--muted); font-weight:400; margin-left:4px; }
+  .plan ul { list-style:none; text-align:left; margin:18px 0 22px; font-size:13.5px; color:var(--muted); }
+  .plan li { padding:4px 0 4px 22px; position:relative; } .plan li::before { content:''; position:absolute; left:5px; top:8px; width:5px; height:9px; border:solid var(--t); border-width:0 2px 2px 0; transform:rotate(45deg); }
+  .plan .btn { width:100%; background:color-mix(in srgb, var(--t) 14%, #131318); border-color:color-mix(in srgb, var(--t) 45%, transparent); color:#fff; }
+  .plan .btn:hover { background:color-mix(in srgb, var(--t) 30%, #131318); }
+
+  /* Steps + download */
+  .steps { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; counter-reset:s; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:24px; counter-increment:s; }
+  .step::before { content:counter(s); display:flex; width:34px; height:34px; border-radius:50%; align-items:center; justify-content:center; font-weight:700; margin-bottom:12px; background:linear-gradient(135deg, #4f7be0, #8a63d2); }
+  .step p { color:var(--muted); font-size:14px; }
+  .dl { max-width:640px; margin:0 auto; text-align:center; background:linear-gradient(160deg, #151a2b, #131318); border:1px solid #2b3a5c; border-radius:20px; padding:44px 30px; box-shadow:0 0 70px rgba(100,130,230,.12); }
+  .dl h2 { font-size:30px; } .dl .meta { display:flex; justify-content:center; gap:22px; color:var(--muted); font-size:13px; margin:14px 0 26px; flex-wrap:wrap; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-bottom:10px; padding:16px 20px; max-width:720px; margin-left:auto; margin-right:auto; transition:border-color .2s; }
+  details[open] { border-color:#35476d; } summary { cursor:pointer; font-weight:600; list-style:none; display:flex; justify-content:space-between; }
+  summary::after { content:'+'; color:var(--accent); font-size:20px; line-height:1; } details[open] summary::after { content:'\2212'; }
+  details p { color:var(--muted); margin-top:10px; font-size:14.5px; }
+  footer { text-align:center; color:#555d70; font-size:12.5px; padding:70px 24px 40px; }
+
+  .rv { opacity:0; transform:translateY(30px); filter:blur(6px); transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1), filter .9s ease; }
+  .rv.in { opacity:1; transform:none; filter:none; }
+  @media (max-width:700px) { .links { display:none; } }
+  @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } .rv { opacity:1; transform:none; } }
+  html { scroll-padding-top:70px; }
+  .ic svg { width:22px; height:22px; stroke:var(--accent); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .grad { background-size:200% auto; animation:shift 7s linear infinite; }
+  @keyframes shift { to { background-position:200% center; } }
+  nav { transition:padding .35s ease, background .35s ease, box-shadow .35s ease; }
+  nav.s { padding:9px 28px; background:rgba(11,11,13,.9); box-shadow:0 10px 34px rgba(0,0,0,.45); }
+  .feat, .plan, .step { position:relative; border-radius:18px; }
+  .feat::after, .plan::after, .step::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity .35s;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(130,170,255,.13), transparent 70%); }
+  .feat:hover::after, .plan:hover::after, .step:hover::after { opacity:1; }
+  .btn { position:relative; overflow:hidden; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, background .3s; }
+  .btn.pri::after { content:''; position:absolute; top:0; bottom:0; width:60%; left:-80%; transform:skewX(-20deg);
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.3), transparent); transition:left .8s ease; }
+  .btn.pri:hover::after { left:130%; }
+  .plan, .feat { transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .4s; }
+  .win { border-radius:18px; }
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<nav>
+  <a href="#" class="logo"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>erys</a>
+  <div class="links"><a href="#features">Features</a><a href="#ui">The UI</a><a href="#pricing">Pricing</a><a href="#download">Download</a></div>
+  <a href="#pricing" class="btn pri">Get a key</a>
+</nav>
+
+<section class="hero">
+  <span class="pill">New in 1.3: themes and a script hub</span>
+  <h1>Simplest Way To Run Lua Is With <span class="grad">ERYS</span></h1>
+  <p>No complicated setup. Open erys, drop in your script and hit run. It is quick, clean and easy on the eyes, so you spend less time fiddling and more time getting things done.</p>
+  <div class="cta"><a href="#pricing" class="btn pri">View plans</a><a href="#ui" class="btn">See the UI</a></div>
+
+  <div class="win rv" id="ui">
+    <div class="wtabs"><b class="on" data-p="p1">Editor</b><b data-p="p2">Console</b><b data-p="p3">Script Hub</b>
+      <div class="r"><span id="mockClock">3:42 PM EDT</span><i class="pfp"></i></div></div>
+    <div class="wbody">
+      <div class="panel on" id="p1">
+<div><span class="ln">1</span><span class="c">-- erys editor</span></div>
+<div><span class="ln">2</span><span class="k">local function</span> greet(name)</div>
+<div><span class="ln">3</span>&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="s">"Hello, "</span> .. name)</div>
+<div><span class="ln">4</span><span class="k">end</span></div>
+<div><span class="ln">5</span></div>
+<div><span class="ln">6</span>greet(<span class="s">"erys"</span>)<span class="cur"></span></div>
+      </div>
+      <div class="panel log" id="p2">
+<div><span style="color:#4d566a">15:42:01</span>&nbsp; <b class="i">INFO</b>Attach requested</div>
+<div><span style="color:#4d566a">15:42:01</span>&nbsp; <b class="g">SUCCESS</b>Attached erys successfully</div>
+<div><span style="color:#4d566a">15:42:09</span>&nbsp; <b class="i">INFO</b>Executing editor script (6 lines)</div>
+<div><span style="color:#4d566a">15:42:09</span>&nbsp; <b class="y">WARN</b>Not attached - script may not run</div>
+<div><span style="color:#4d566a">15:42:12</span>&nbsp; <b class="g">SUCCESS</b>Saved script to hub: Fibonacci</div>
+      </div>
+      <div class="panel" id="p3">
+        <div class="card2"><div>Infinite Yield<small>Command-line admin script</small></div><span class="mini">Run</span></div>
+        <div class="card2"><div>FPS counter<small>Small FPS label for your screen</small></div><span class="mini">Run</span></div>
+        <div class="card2"><div>Table printer<small>dump() helper for nested tables</small></div><span class="mini">Run</span></div>
+        <div class="card2"><div>Learn: Sorting<small>Ascending and descending sort</small></div><span class="mini">Run</span></div>
+      </div>
+    </div>
+    <div class="wbar"><div style="display:flex">
+      <svg viewBox="0 0 24 24"><path d="M21 3L3 10.5l7 3 3 7z"/><path d="M10 13.5L21 3"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></div>
+      <span>Ln 6, Col 14</span><span class="st"><i></i>Ready</span></div>
+    <div class="toast"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#a5e075;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vertical-align:-1px;margin-right:8px"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Attached erys successfully</div>
+  </div>
+</section>
+
+<section id="features">
+  <h2 class="rv">Made to be a <span class="grad">joy</span> to use</h2>
+  <p class="sub rv">Little details that make a big difference.</p>
+  <div class="grid" id="featGrid"></div>
+</section>
+
+<section id="pricing">
+  <h2 class="rv">Pick a plan</h2>
+  <p class="sub rv">Pay with Robux and pick the length that suits you. Longer plans unlock fancier badges in the app.</p>
+  <div class="plans" id="plans"></div>
+</section>
+
+<section>
+  <h2 class="rv">How buying works</h2>
+  <p class="sub rv">Getting started takes about two minutes.</p>
+  <div class="steps">
+    <div class="step rv"><h3>Grab a pass</h3><p>Choose a plan above and buy its game pass on Roblox with your Robux.</p></div>
+    <div class="step rv"><h3>Tell us about it</h3><p>Send us your Roblox username and a quick screenshot of your purchase.</p></div>
+    <div class="step rv"><h3>Get your key</h3><p>We will send you a key. Download erys, sign in with a username and your key, and you are in.</p></div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="dl rv">
+    <h2>Download <span class="grad">erys</span></h2>
+    <div class="meta"><span>Version 1.3</span><span>Windows 10 / 11</span><span>WebView2 required</span></div>
+    <a id="dlBtn" class="btn pri" style="font-size:16px;padding:14px 36px">Download erys.zip</a>
+    <p style="color:var(--muted);font-size:13px;margin-top:16px">Unzip anywhere and run the app. You need a key to sign in.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="rv">Questions</h2><p class="sub rv"></p>
+  <details class="rv"><summary>Is it Robux only?</summary><p>Yes. Plans are bought with Robux through game passes. We do not take cards or crypto.</p></details>
+  <details class="rv"><summary>How long until I get my key?</summary><p>Once your receipt is checked. Check the Discord for current times.</p></details>
+  <details class="rv"><summary>What do the badges mean?</summary><p>Your plan sets your badge: Bronze (1 week), Silver (3 months), Gold (1 year) and Diamond (lifetime).</p></details>
+  <details class="rv"><summary>What do I need to run it?</summary><p>Windows 10 or 11 with the Microsoft WebView2 runtime, which is already on most up-to-date PCs.</p></details>
+</section>
+
+<footer>&copy; erys. Not affiliated with, endorsed by or sponsored by Roblox Corporation.</footer>
+
+<script>
+  /* ================= EDIT THESE ================= */
+  const DOWNLOAD_URL = 'https://github.com/72qc/erys/raw/main/erys.zip';
+  const DISCORD_URL  = '#';        // your Discord invite for sending receipts
+  const PLANS = [                  // price = Robux, pass = the Roblox game pass link for that plan
+    { name:'Bronze',  dur:'1 Week',   price:50,  color:'#e0975a', pass:'https://www.roblox.com/game-pass/2003078610', perks:['Full editor + autocomplete','Script hub & console','Bronze badge'] },
+    { name:'Silver',  dur:'3 Months', price:750,  color:'#dfe6f2', pass:'https://www.roblox.com/game-pass/2001794807', perks:['Everything in Bronze','All themes','Silver badge'] },
+    { name:'Gold',    dur:'1 Year',   price:2000, color:'#ffd75e', pass:'https://www.roblox.com/game-pass/2002688793', perks:['Everything in Silver','Priority support','Gold badge'], tag:'Popular' },
+    { name:'Diamond', dur:'Lifetime', price:7000, color:'#7fe8ff', pass:'https://www.roblox.com/game-pass/2003072592', perks:['Everything, forever','Free updates','Animated Diamond badge'], tag:'Best value', best:true }
+  ];
+  const FEATURES = [
+    ['<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>','Smooth typing','Everything glides, from the cursor to the scrolling, and scripts can even type themselves in.'],
+    ['<path d="M13 2L4 14h6l-1 8 9-12h-6z"/>','Smart autocomplete','Start typing and erys finishes the Lua for you, from keywords to full snippets.'],
+    ['<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/>','Script hub','A shelf of ready-to-go scripts. Search, load or run them in one click, and save your own.'],
+    ['<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 10l3 2-3 2M13 15h4"/>','Live console','See exactly what happened and when, in a clean log you can filter.'],
+    ['<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="10" r="1"/>','Themes','Six themes to match your mood, and they recolor the whole app, not just the editor.'],
+    ['<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/>','Profiles and badges','Sign in with your name and picture, and wear a badge that grows with your plan.']
+  ];
+  /* ============================================= */
+
+  const gem = c => `<svg class="gem" viewBox="0 0 24 24" style="--t:${c}"><path d="M6 3h12l4 6-10 13L2 9z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width="1.2" stroke-linejoin="round"/><path d="M2 9h20M9 3l-2 6 5 13M15 3l2 6-5 13" fill="none" stroke="rgba(0,0,0,.25)"/></svg>`;
+  document.getElementById('featGrid').innerHTML = FEATURES.map(f =>
+    `<div class="feat rv"><div class="ic"><svg viewBox="0 0 24 24">${f[0]}</svg></div><h3>${f[1]}</h3><p>${f[2]}</p></div>`).join('');
+  document.getElementById('plans').innerHTML = PLANS.map(p => `
+    <div class="plan rv ${p.best ? 'best' : ''}" style="--t:${p.color}">${p.tag ? `<div class="tag">${p.tag}</div>` : ''}
+      ${gem(p.color)}<h3>${p.name}</h3><div class="dur">${p.dur}</div>
+      <div class="price"><b data-v="${p.price}">0</b><span>R$</span></div>
+      <ul>${p.perks.map(x => `<li>${x}</li>`).join('')}</ul>
+      <a class="btn" href="${p.pass}" target="_blank" rel="noopener">Buy with Robux</a></div>`).join('');
+  document.getElementById('dlBtn').href = DOWNLOAD_URL;
+
+  // Smooth extras: count-up prices, card spotlight, nav shadow
+  function countUp(el) {
+    const end = +el.dataset.v, t0 = performance.now(), dur = 1100;
+    (function f(now) {
+      const t = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(end * e).toLocaleString();
+      if (t < 1) requestAnimationFrame(f);
+    })(t0);
+  }
+  document.addEventListener('mousemove', e => {
+    const c = e.target.closest && e.target.closest('.feat, .plan, .step');
+    if (c) { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', e.clientX - r.left + 'px'); c.style.setProperty('--my', e.clientY - r.top + 'px'); }
+  });
+  const nav = document.querySelector('nav');
+  addEventListener('scroll', () => nav.classList.toggle('s', scrollY > 20), { passive: true });
+
+  // Mock window tabs
+  document.querySelectorAll('.wtabs b').forEach(t => t.onclick = () => {
+    document.querySelectorAll('.wtabs b').forEach(x => x.classList.toggle('on', x === t));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === t.dataset.p));
+  });
+  // Mock clock
+  const tick = () => document.getElementById('mockClock').textContent =
+    new Intl.DateTimeFormat('en-US', { timeZone:'America/New_York', hour:'numeric', minute:'2-digit', timeZoneName:'short' }).format(new Date());
+  tick(); setInterval(tick, 20000);
+  // Reveal on scroll
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); const b = e.target.querySelector('.price b'); if (b) countUp(b); io.unobserve(e.target); } }), { threshold:.12 });
+  document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
